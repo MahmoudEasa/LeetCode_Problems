@@ -1,5 +1,3 @@
-
-
 typedef struct node {
     int val;
     struct node *next;
@@ -81,17 +79,49 @@ void myStackFree(MyStack* obj) {
     obj->size = 0;
 }
 
-/**
- * Your MyStack struct will be instantiated and called as such:
- * MyStack* obj = myStackCreate();
- * myStackPush(obj, x);
- 
- * int param_2 = myStackPop(obj);
- 
- * int param_3 = myStackTop(obj);
- 
- * bool param_4 = myStackEmpty(obj);
- 
- * myStackFree(obj);
-*/
+int checkValue(int src, int val, int asciSteps, MyStack *obj)
+{
+    if (val == val && src != (val + asciSteps))
+    {
+        myStackFree(obj);
+        return (0);
+    }
 
+    return (1);
+}
+
+bool isValid(char* s) {
+    MyStack *obj = myStackCreate();
+    short i, val;
+    // (40 +1) [91 +2] {123 +2}
+
+    for (i = 0; s[i]; i++)
+    {
+        val = 0;
+
+        if (s[i] == 40 || s[i] == 123 || s[i] == 91)
+        {
+            myStackPush(obj, s[i]);
+            continue;
+        }
+
+        if (!myStackEmpty(obj))
+            val = myStackPop(obj);
+
+        if (!val) return (0);
+
+        if (val == 40)
+            if (!checkValue(s[i], val, 1, obj)) return (0);
+
+        if (val == 91 || val == 123)
+            if (!checkValue(s[i], val, 2, obj)) return (0);
+    }
+
+    if (!myStackEmpty(obj))
+    {
+        myStackFree(obj);
+        return (0);
+    }
+
+    return (1);
+}
